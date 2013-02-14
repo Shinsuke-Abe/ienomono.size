@@ -53,3 +53,6 @@ gem 'simple_form'
 
 # To use devise
 gem 'devise'
+
+# TO use action_args
+gem 'action_args'
