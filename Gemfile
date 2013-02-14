@@ -7,6 +7,11 @@ gem 'rails', '3.2.11'
 
 gem 'sqlite3'
 
+group :test, :development do
+  gem 'rspec-rails', "~> 2.0"
+  gem 'factory_girl'
+end
+
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -36,3 +41,15 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
+
+# To use capybara
+gem 'capybara'
+
+# To use slim
+gem 'slim'
+
+# To use simple_form
+gem 'simple_form'
+
+# To use devise
+gem 'devise'
