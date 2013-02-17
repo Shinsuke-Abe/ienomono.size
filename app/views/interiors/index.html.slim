@@ -1,0 +1,19 @@
+h1 Listing interiors
+
+table
+  tr
+    th Name
+    th
+    th
+    th
+
+  - @interiors.each do |interior|
+    tr
+      td= interior.name
+      td= link_to 'Show', interior
+      td= link_to 'Edit', edit_interior_path(interior)
+      td= link_to 'Destroy', interior, method: :delete, data: { confirm: 'Are you sure?' }
+
+br
+
+= link_to 'New Interior', new_interior_path
