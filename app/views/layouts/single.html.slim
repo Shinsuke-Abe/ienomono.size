@@ -11,8 +11,4 @@ html
     p#notice.notice= notice
     p#alert.alert= alert
 
-    #user_header
-      = "ようこそ #{current_user.email} さん | "
-      = link_to "ログアウト", destroy_user_session_path, method: :delete
-
     = yield
