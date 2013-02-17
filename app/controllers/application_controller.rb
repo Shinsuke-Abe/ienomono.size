@@ -5,6 +5,11 @@ class ApplicationController < ActionController::Base
 
   private
   def layout
-    is_a?(Devise::SessionsController) ? "single" : "application"
+    if is_a?(Devise::SessionsController) or
+       is_a?(Devise::RegistrationsController)
+      "single"
+    else
+      "application"
+    end
   end
 end

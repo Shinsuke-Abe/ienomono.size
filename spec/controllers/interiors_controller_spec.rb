@@ -13,4 +13,8 @@ describe InteriorsController do
       expect(assigns[:interiors].length).to eq(expected.interiors.length)
     end
   end
+
+  after do
+    FactoryGirl.reload
+  end
 end

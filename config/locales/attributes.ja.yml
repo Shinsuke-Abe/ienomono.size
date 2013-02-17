@@ -6,5 +6,7 @@ ja:
         password: 'パスワード'
         password_confirmation: 'パスワード(再入力)'
         remember_me: '次回からパスワードを省く'
+        user_name: 'ユーザ名'
+        login: ユーザ名またはメールアドレス
       interior:
         name: '名前'

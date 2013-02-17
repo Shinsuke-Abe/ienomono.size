@@ -12,7 +12,7 @@ html
     p#alert.alert= alert
 
     #user_header
-      = "ようこそ #{current_user.email} さん | "
+      = "ようこそ #{current_user.welcome_name} さん | "
       = link_to "ログアウト", destroy_user_session_path, method: :delete
 
     = yield
