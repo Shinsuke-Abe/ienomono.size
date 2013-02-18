@@ -2,6 +2,12 @@
 require 'factory_girl'
 
 FactoryGirl.define do
+  factory :interior_history do
+    sequence(:start_date) {|n| Date.today - n}
+    sequence(:height) {|n| 1.5 + n}
+    sequence(:width) {|n| 1.2 + n}
+  end
+
   factory :interior do
     sequence(:name) {|n| "interior name #{n}"}
   end

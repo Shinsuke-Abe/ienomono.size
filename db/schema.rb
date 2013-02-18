@@ -11,7 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130217120148) do
+ActiveRecord::Schema.define(:version => 20130218135938) do
+
+  create_table "interior_histories", :force => true do |t|
+    t.date     "start_date"
+    t.float    "width"
+    t.float    "height"
+    t.float    "depth"
+    t.integer  "interior_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "interior_histories", ["interior_id"], :name => "index_interior_histories_on_interior_id"
 
   create_table "interiors", :force => true do |t|
     t.string   "name"
