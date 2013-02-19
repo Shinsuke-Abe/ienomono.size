@@ -3,6 +3,9 @@ h1 Listing interiors
 table
   tr
     th Name
+    th Width
+    th Height
+    th Depth
     th
     th
     th
@@ -10,6 +13,14 @@ table
   - @interiors.each do |interior|
     tr
       td= interior.name
+      - if interior.latest_history
+        td= interior.latest_history.width
+        td= interior.latest_history.height
+        td= interior.latest_history.depth
+      - else
+        td
+        td
+        td
       td= link_to 'Show', interior
       td= link_to 'Edit', edit_interior_path(interior)
       td= link_to 'Destroy', interior, method: :delete, data: { confirm: 'Are you sure?' }
