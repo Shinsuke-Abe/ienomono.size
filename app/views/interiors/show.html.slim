@@ -1,6 +1,19 @@
-p
+p#item_name
   b Name
   = @interior.name
+- if @interior.latest_history
+  p#latest_history_start_date
+    b Start Date
+    = @interior.latest_history.start_date
+  p#latest_history_width
+    b Width
+    = @interior.latest_history.width
+  p#latest_history_height
+    b Height
+    = @interior.latest_history.height
+  p#latest_history_depth
+    b Depth
+    = @interior.latest_history.depth
 
 = link_to 'Edit', edit_interior_path(@interior)
 = " | "

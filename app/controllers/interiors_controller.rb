@@ -25,7 +25,7 @@ class InteriorsController < ApplicationController
 
   # POST /interiors
   def create(interior)
-    @interior = current_user.interiors.build(interior)
+    @interior = current_user.build_interior_with_history(interior)
 
     if @interior.save
       redirect_to @interior, notice: 'Interior was successfully created.'

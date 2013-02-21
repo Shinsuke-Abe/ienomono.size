@@ -1,3 +1,7 @@
 = simple_form_for @interior do |f|
   = f.input :name
+  = f.simple_fields_for @interior.interior_histories.build do |history_form|
+    = history_form.input :width
+    = history_form.input :height
+    = history_form.input :depth
   = f.button :submit

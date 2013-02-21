@@ -25,16 +25,6 @@ describe 'ユーザ機能' do
   end
 end
 
-def login_user_action(login_info)
-  visit new_user_session_path
-
-  fill_in "user_login", :with => login_info[:login]
-  fill_in "user_password", :with => login_info[:password]
-  click_button "Sign in"
-
-  current_path.should == root_path
-end
-
 def not_logined_access(url)
   visit url
   current_path.should == new_user_session_path

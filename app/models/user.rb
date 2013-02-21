@@ -27,4 +27,19 @@ class User < ActiveRecord::Base
       email
     end
   end
+
+  def build_interior_with_history(interior_data)
+    new_interior_data = interior_data.dup
+
+    new_history = new_interior_data.delete(:interior_history)
+
+    interior = interiors.build(new_interior_data)
+    if new_history and
+       (new_history[:width].present? or new_history[:height].present? or new_history[:depth].present?)
+      new_history[:start_date] = Date.today
+      interior.interior_histories.build(new_history)
+    end
+
+    interior
+  end
 end
