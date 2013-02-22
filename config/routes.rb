@@ -1,5 +1,9 @@
 IenomonoSize::Application.routes.draw do
-  resources :interiors
+  get "interior_histories/index"
+
+  resources :interiors do
+    resources :interior_histories
+  end
 
 
   devise_for :users
