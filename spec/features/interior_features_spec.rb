@@ -21,14 +21,7 @@ describe "インテリア管理機能" do
 
       first_user.reload
 
-      current_path.should == interior_path(first_user.interiors.first.id)
-
-      expect_history = first_user.interiors.first.latest_history
-
-      expect(find("#latest_history_start_date")).to have_content Date.today.to_s
-      expect(find("#latest_history_width")).to have_content expect_history.width
-      expect(find("#latest_history_height")).to have_content expect_history.height
-      expect(find("#latest_history_depth")).to have_content expect_history.depth
+      expect_to_interior_path(first_user.interiors.first)
     end
   end
 
@@ -42,13 +35,7 @@ describe "インテリア管理機能" do
       expect(page).to have_selector "table tr"
       all("tr")[1].first(:link, "Show").click
 
-      current_path.should == interior_path(first_user.interiors.first.id)
-
-      expect_history = first_user.interiors.first.latest_history
-      expect(find("#latest_history_start_date")).to have_content expect_history.start_date.to_s
-      expect(find("#latest_history_width")).to have_content expect_history.width
-      expect(find("#latest_history_height")).to have_content expect_history.height
-      expect(find("#latest_history_depth")).to have_content expect_history.depth
+      expect_to_interior_path(first_user.interiors.first)
 
       click_link "Show older history..."
 
@@ -59,6 +46,17 @@ describe "インテリア管理機能" do
       # expect(page).to have_selector "table tr"
       # all("tr").length.should == (first.interiors.first.interior_histories.length)
     end
+  end
+
+  def expect_to_interior_path(interior)
+    current_path.should == interior_path(interior.id)
+
+    expect_history = interior.latest_history
+
+    expect(find("#latest_history_start_date")).to have_content expect_history.start_date.to_s
+    expect(find("#latest_history_width")).to have_content expect_history.width
+    expect(find("#latest_history_height")).to have_content expect_history.height
+    expect(find("#latest_history_depth")).to have_content expect_history.depth
   end
 
   after do
