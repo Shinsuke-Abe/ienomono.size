@@ -4,6 +4,6 @@ class InteriorHistoriesController < ApplicationController
 
   def index(interior_id)
     @current_interior = current_user.interiors.find(interior_id)
-    # @interior_histories = current_user.interiors.find(interiors_id).interior_histories
+    @histories = current_user.interiors.find(interior_id).interior_histories
   end
 end

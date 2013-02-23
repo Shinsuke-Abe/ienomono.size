@@ -2,3 +2,16 @@ h1 Show older history
 
 #interior_name= @current_interior.name
 
+table
+  tr
+    td Start Date
+    td Width
+    td Height
+    td Depth
+  - @histories.each do |history|
+    tr
+      td= history.start_date.to_s
+      td= history.width
+      td= history.height
+      td= history.depth
+

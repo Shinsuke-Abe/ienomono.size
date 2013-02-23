@@ -43,8 +43,8 @@ describe "インテリア管理機能" do
 
       expect(find("#interior_name")).to have_content first_user.interiors.first.name
 
-      # expect(page).to have_selector "table tr"
-      # all("tr").length.should == (first.interiors.first.interior_histories.length)
+      expect(page).to have_selector "table tr"
+      all("tr").length.should == (first_user.interiors.first.interior_histories.length + 1)
     end
   end
 

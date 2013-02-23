@@ -6,6 +6,6 @@ class Interior < ActiveRecord::Base
   attr_accessible :name
 
   def latest_history
-    interior_histories.order("start_date DESC").first
+    interior_histories.first
   end
 end
