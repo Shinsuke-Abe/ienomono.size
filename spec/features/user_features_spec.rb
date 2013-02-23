@@ -5,7 +5,6 @@ describe 'ユーザ機能' do
   it "未認証場合はログインページにリダイレクトする" do
     not_logined_access interiors_path
     not_logined_access new_interior_path
-    not_logined_access edit_interior_path(1)
     not_logined_access interior_interior_histories_path(1)
   end
 

@@ -18,11 +18,6 @@ class InteriorsController < ApplicationController
     @interior = current_user.interiors.build
   end
 
-  # GET /interiors/1/edit
-  def edit(id)
-    @interior = current_user.interiors.find(id)
-  end
-
   # POST /interiors
   def create(interior)
     @interior = current_user.build_interior_with_history(interior)
@@ -31,17 +26,6 @@ class InteriorsController < ApplicationController
       redirect_to @interior, notice: 'Interior was successfully created.'
     else
       render action: 'new'
-    end
-  end
-
-  # PUT /interiors/1
-  def update(id, interior)
-    @interior = current_user.interiors.find(id)
-
-    if @interior.update_attributes(interior)
-      redirect_to @interior, notice: 'Interior was successfully updated.'
-    else
-      render action: 'edit'
     end
   end
 

@@ -8,7 +8,6 @@ table
     th Depth
     th
     th
-    th
 
   - @interiors.each do |interior|
     tr
@@ -22,7 +21,6 @@ table
         td
         td
       td= link_to 'Show', interior
-      td= link_to 'Edit', edit_interior_path(interior)
       td= link_to 'Destroy', interior, method: :delete, data: { confirm: 'Are you sure?' }
 
 br
