@@ -1,20 +1,23 @@
 p#item_name
   b Name
   = @interior.name
-- if @interior.latest_history
-  p#latest_history_start_date
-    b Start Date
-    = @interior.latest_history.start_date
-  p#latest_history_width
-    b Width
-    = @interior.latest_history.width
-  p#latest_history_height
-    b Height
-    = @interior.latest_history.height
-  p#latest_history_depth
-    b Depth
-    = @interior.latest_history.depth
-  - if @interior.interior_histories.length >= 2
-    = link_to 'Show older history...', interior_interior_histories_path(@interior)
+= link_to 'Get new item', new_interior_interior_history_path(@interior), id: 'new_history', remote: true
+#latest_history
+  - if @interior.latest_history
+    p#latest_history_start_date
+      b Start Date
+      = @interior.latest_history.start_date
+    p#latest_history_width
+      b Width
+      = @interior.latest_history.width
+    p#latest_history_height
+      b Height
+      = @interior.latest_history.height
+    p#latest_history_depth
+      b Depth
+      = @interior.latest_history.depth
+#history_form
+- if @interior.interior_histories.length >= 2
+  = link_to 'Show older history...', interior_interior_histories_path(@interior)
 
 = link_to 'Back', interiors_path

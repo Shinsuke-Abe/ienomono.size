@@ -51,3 +51,6 @@ def login_user_action(login_info)
 
   current_path.should == root_path
 end
+
+Capybara.javascript_driver = :webkit
+ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection

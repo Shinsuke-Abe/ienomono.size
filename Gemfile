@@ -10,6 +10,12 @@ gem 'sqlite3'
 group :test, :development do
   gem 'rspec-rails', "~> 2.0"
   gem 'factory_girl'
+
+  # To use capybara
+  gem 'capybara'
+
+  # To use capybara-webkit
+  gem 'capybara-webkit'
 end
 
 
@@ -41,9 +47,6 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
-
-# To use capybara
-gem 'capybara'
 
 # To use slim
 gem 'slim'
