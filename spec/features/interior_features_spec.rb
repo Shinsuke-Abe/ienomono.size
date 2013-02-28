@@ -58,6 +58,20 @@ describe "インテリア管理機能" do
         find_field("interior_history_depth").value.should == ""
       end
     end
+
+    it "新しいサイズを入力する" do
+      click_link "Get new item"
+
+      fill_in "interior_history_width", with: "25.4"
+      fill_in "interior_history_height", with: "35.4"
+      fill_in "interior_history_depth", with: "65.1"
+
+      click_button "登録する"
+
+      @first_user.reload
+
+      expect_to_interior_path(@first_user.interiors.first)
+    end
   end
 
   def expect_to_interior_path(interior)

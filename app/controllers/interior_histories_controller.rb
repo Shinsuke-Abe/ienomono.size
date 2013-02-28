@@ -14,4 +14,14 @@ class InteriorHistoriesController < ApplicationController
 
     render json: {html: html}
   end
+
+  def create(interior_id, interior_history)
+    @interior_history = current_user.interiors.find(interior_id).interior_histories.build(interior_history)
+
+    if @interior_history.save
+      redirect_to interior_path(interior_id), notice: 'Interior history was successfully created.'
+    else
+
+    end
+  end
 end
