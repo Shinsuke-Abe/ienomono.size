@@ -52,25 +52,43 @@ describe "インテリア管理機能" do
     it "Get new itemリンクを押下すると新しいサイズ入力用のフォームが表示される" do
       click_link "Get new item"
 
-      within "#history_form" do
-        find_field("interior_history_width").value.should == ""
-        find_field("interior_history_height").value.should == ""
-        find_field("interior_history_depth").value.should == ""
-      end
+      expect_new_history_form(false)
     end
 
     it "新しいサイズを入力する" do
-      click_link "Get new item"
+      create_new_history_action(width: "25.4", height: "35.4", depth: "65.1")
 
-      fill_in "interior_history_width", with: "25.4"
-      fill_in "interior_history_height", with: "35.4"
-      fill_in "interior_history_depth", with: "65.1"
+      actual_interior = Interior.find(@first_user.interiors.first.id)
 
-      click_button "登録する"
+      expect_to_interior_path(actual_interior)
+    end
 
-      @first_user.reload
+    it "新しいサイズ入力でエラーになる場合はフォームが再送される" do
+      create_new_history_action(width: "", height: "", depth: "")
 
       expect_to_interior_path(@first_user.interiors.first)
+
+      expect_new_history_form(true, 3)
+    end
+  end
+
+  def create_new_history_action(new_history_data)
+    click_link "Get new item"
+
+    fill_in "interior_history_width", with: new_history_data[:width]
+    fill_in "interior_history_height", with: new_history_data[:height]
+    fill_in "interior_history_depth", with: new_history_data[:depth]
+
+    click_button "登録する"
+  end
+
+  def expect_new_history_form(has_error, error_field_count = 0)
+    within "#history_form" do
+      find_field("interior_history_width").value.should == ""
+      find_field("interior_history_height").value.should == ""
+      find_field("interior_history_depth").value.should == ""
+
+      all(".field_with_errors").length.should == error_field_count if has_error
     end
   end
 

@@ -9,7 +9,14 @@ $ ->
       html = response.html
 
       # 領域を書き換え
-      $('#history_form').append html
+      $('#history_form').html html
       $('#latest_history').css('display', 'none')
     .on 'ajax:error', (event) ->
       $('#history_form').append "エラー"
+  $('#history_form')
+    .on 'ajax:complete', (event, ajax, status) ->
+      response = $.parseJSON(ajax.responseText)
+      html = response.html
+
+      # エラーフォームへの置きかえ
+      $('#history_form').html html

@@ -1,4 +1,4 @@
-= simple_form_for [:interior, @interior_history] do |f|
+= simple_form_for [:interior, @interior_history || InteriorHistory.new], remote: true do |f|
   = f.input :width
   = f.input :height
   = f.input :depth
