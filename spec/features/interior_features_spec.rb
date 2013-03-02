@@ -76,15 +76,34 @@ describe "インテリア管理機能" do
 
       latest_history = @first_user.interiors.first.latest_history
 
-      within "#history_form" do |variable|
-        find_field("interior_history_start_date_1i").value.should == latest_history.start_date.year.to_s
-        find_field("interior_history_start_date_2i").value.should == latest_history.start_date.month.to_s
-        find_field("interior_history_start_date_3i").value.should == latest_history.start_date.day.to_s
+      expect_data = {
+        start_date: latest_history.start_date,
+        width: latest_history.width.to_s,
+        height: latest_history.height.to_s,
+        depth: latest_history.depth.to_s
+      }
+      expect_edit_history_form(true, expect_data)
+    end
 
-        find_field("interior_history_width").value.should == latest_history.width.to_s
-        find_field("interior_history_height").value.should == latest_history.height.to_s
-        find_field("interior_history_depth").value.should == latest_history.depth.to_s
-      end
+    it "最新の履歴を修正する" do
+      latest_history = @first_user.interiors.first.latest_history
+      edit_new_history_action(width: "99", height: latest_history.height, depth: latest_history.depth)
+
+      sleep 2
+      actual_user = User.find(@first_user.id)
+      expect_to_interior_path(actual_user.interiors.first)
+    end
+
+    it "最新の履歴編集でエラーになる場合はフォームが再送される" do
+      edit_new_history_action(width: "", height: "", depth: "")
+
+      sleep 2
+      latest_history = @first_user.interiors.first.latest_history
+      expect_data = {
+        start_date: latest_history.start_date,
+        width: "", height: "", depth: ""
+      }
+      expect_edit_history_form(true, expect_data, 3)
     end
   end
 
@@ -98,11 +117,35 @@ describe "インテリア管理機能" do
     click_button "登録する"
   end
 
+  def edit_new_history_action(update_history_data)
+    click_link "Edit item"
+
+    fill_in "interior_history_width", with: update_history_data[:width]
+    fill_in "interior_history_height", with: update_history_data[:height]
+    fill_in "interior_history_depth", with: update_history_data[:depth]
+
+    click_button "更新する"
+  end
+
   def expect_new_history_form(has_error, error_field_count = 0)
     within "#history_form" do
       find_field("interior_history_width").value.should == ""
       find_field("interior_history_height").value.should == ""
       find_field("interior_history_depth").value.should == ""
+
+      all(".field_with_errors").length.should == error_field_count if has_error
+    end
+  end
+
+  def expect_edit_history_form(has_error, expect_data, error_field_count = 0)
+    within "#history_form" do
+      find_field("interior_history_start_date_1i").value.should == expect_data[:start_date].year.to_s
+      find_field("interior_history_start_date_2i").value.should == expect_data[:start_date].month.to_s
+      find_field("interior_history_start_date_3i").value.should == expect_data[:start_date].day.to_s
+
+      find_field("interior_history_width").value.should == expect_data[:width]
+      find_field("interior_history_height").value.should == expect_data[:height]
+      find_field("interior_history_depth").value.should == expect_data[:depth]
 
       all(".field_with_errors").length.should == error_field_count if has_error
     end

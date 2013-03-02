@@ -1,4 +1,4 @@
-= simple_form_for [:interior, interior_history || InteriorHistory.new], remote: true do |f|
+= simple_form_for [current_interior, interior_history || InteriorHistory.new], remote: true do |f|
   - if interior_history.present? and interior_history.id.present?
     = f.input :start_date
   = f.input :width
