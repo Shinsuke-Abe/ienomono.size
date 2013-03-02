@@ -2,6 +2,7 @@ p#item_name
   b Name
   = @interior.name
 = link_to 'Get new item', new_interior_interior_history_path(@interior), id: 'new_history', remote: true
+= link_to 'Edit item', edit_interior_interior_history_path(@interior, @interior.latest_history), id: 'edit_history', remote: true
 #latest_history
   - if @interior.latest_history
     p#latest_history_start_date

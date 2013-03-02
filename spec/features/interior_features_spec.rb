@@ -58,9 +58,9 @@ describe "インテリア管理機能" do
     it "新しいサイズを入力する" do
       create_new_history_action(width: "25.4", height: "35.4", depth: "65.1")
 
-      actual_interior = Interior.find(@first_user.interiors.first.id)
-
-      expect_to_interior_path(actual_interior)
+      sleep 2
+      actual_user = User.find(@first_user.id)
+      expect_to_interior_path(actual_user.interiors.first)
     end
 
     it "新しいサイズ入力でエラーになる場合はフォームが再送される" do
@@ -69,6 +69,22 @@ describe "インテリア管理機能" do
       expect_to_interior_path(@first_user.interiors.first)
 
       expect_new_history_form(true, 3)
+    end
+
+    it "Edit itemリンクをクリックすると今使っている物の編集用のフォームが表示される" do
+      click_link "Edit item"
+
+      latest_history = @first_user.interiors.first.latest_history
+
+      within "#history_form" do |variable|
+        find_field("interior_history_start_date_1i").value.should == latest_history.start_date.year.to_s
+        find_field("interior_history_start_date_2i").value.should == latest_history.start_date.month.to_s
+        find_field("interior_history_start_date_3i").value.should == latest_history.start_date.day.to_s
+
+        find_field("interior_history_width").value.should == latest_history.width.to_s
+        find_field("interior_history_height").value.should == latest_history.height.to_s
+        find_field("interior_history_depth").value.should == latest_history.depth.to_s
+      end
     end
   end
 

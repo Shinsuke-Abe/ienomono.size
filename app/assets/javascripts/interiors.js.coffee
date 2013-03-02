@@ -13,6 +13,18 @@ $ ->
       $('#latest_history').css('display', 'none')
     .on 'ajax:error', (event) ->
       $('#history_form').append "エラー"
+
+  $('#edit_history')
+    .on 'ajax:complete', (event, ajax, status) ->
+      response = $.parseJSON(ajax.responseText)
+      html = response.html
+
+      # フォームの置き換え
+      $('#history_form').html html
+      $('#latest_history').css('display', 'none')
+    .on 'ajax:error', (event) ->
+      $('#history_form').append "エラー"
+
   $('#history_form')
     .on 'ajax:complete', (event, ajax, status) ->
       response = $.parseJSON(ajax.responseText)
