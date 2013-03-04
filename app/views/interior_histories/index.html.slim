@@ -9,6 +9,7 @@ table
     th Width
     th Height
     th Depth
+    th Memo
     th
   - @histories.each do |history|
     tr
@@ -16,5 +17,6 @@ table
       td= history.width
       td= history.height
       td= history.depth
+      td= history.memo_text
       td= link_to 'Destroy', interior_interior_history_path(@current_interior, history), method: :delete, data: {confirm: "Are you sure?"}
 

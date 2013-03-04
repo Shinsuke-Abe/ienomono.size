@@ -20,8 +20,8 @@ table
         td
         td
         td
-      td= link_to 'Show', interior
-      td= link_to 'Destroy', interior, method: :delete, data: { confirm: 'Are you sure?' }
+      td= link_to 'Show', interior_path(interior)
+      td= link_to 'Destroy', interior_path(interior), method: :delete, data: { confirm: 'Are you sure?' }
 
 br
 
