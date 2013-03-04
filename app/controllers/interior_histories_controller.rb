@@ -37,6 +37,13 @@ class InteriorHistoriesController < ApplicationController
     end
   end
 
+  def destroy(interior_id, id)
+    @interior_history = load_interior_history(id)
+    @interior_history.destroy
+
+    redirect_to interior_interior_histories_path(interior_id)
+  end
+
   private
   def current_interior
     @current_interior ||= current_user.interiors.find(params[:interior_id])

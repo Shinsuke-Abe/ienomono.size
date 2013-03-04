@@ -1,17 +1,20 @@
 h1 Show older history
 
 #interior_name= @current_interior.name
+= link_to "Back to interior", interior_path(@current_interior)
 
 table
   tr
-    td Start Date
-    td Width
-    td Height
-    td Depth
+    th Start Date
+    th Width
+    th Height
+    th Depth
+    th
   - @histories.each do |history|
     tr
       td= history.start_date.to_s
       td= history.width
       td= history.height
       td= history.depth
+      td= link_to 'Destroy', interior_interior_history_path(@current_interior, history), method: :delete, data: {confirm: "Are you sure?"}
 

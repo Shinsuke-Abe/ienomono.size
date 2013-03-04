@@ -107,24 +107,33 @@ describe "インテリア管理機能" do
     end
   end
 
+  def input_and_submit_history_data_action(method, input_history_data)
+    case method
+    when :create
+      get_form_link = "Get new item"
+      submit_button = "登録する"
+    when :update
+      get_form_link = "Edit item"
+      submit_button = "更新する"
+    end
+
+    click_link get_form_link
+
+    # TODO start_dateのセレクト
+
+    fill_in "interior_history_width", with: input_history_data[:width]
+    fill_in "interior_history_height", with: input_history_data[:height]
+    fill_in "interior_history_depth", with: input_history_data[:depth]
+
+    click_button submit_button
+  end
+
   def create_new_history_action(new_history_data)
-    click_link "Get new item"
-
-    fill_in "interior_history_width", with: new_history_data[:width]
-    fill_in "interior_history_height", with: new_history_data[:height]
-    fill_in "interior_history_depth", with: new_history_data[:depth]
-
-    click_button "登録する"
+    input_and_submit_history_data_action(:create, new_history_data)
   end
 
   def edit_new_history_action(update_history_data)
-    click_link "Edit item"
-
-    fill_in "interior_history_width", with: update_history_data[:width]
-    fill_in "interior_history_height", with: update_history_data[:height]
-    fill_in "interior_history_depth", with: update_history_data[:depth]
-
-    click_button "更新する"
+    input_and_submit_history_data_action(:update, update_history_data)
   end
 
   def expect_new_history_form(has_error, error_field_count = 0)
