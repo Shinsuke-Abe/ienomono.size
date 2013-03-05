@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   attr_accessor :login
 
   has_many :interiors
+  has_many :category_tags
 
   # ログインの条件を「ユーザ名 or メールアドレス」にする
   def self.find_for_database_authentication(warden_conditions)
