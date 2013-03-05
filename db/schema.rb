@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130305120042) do
+ActiveRecord::Schema.define(:version => 20130305120851) do
 
   create_table "category_tags", :force => true do |t|
     t.string   "name"
@@ -43,6 +43,16 @@ ActiveRecord::Schema.define(:version => 20130305120042) do
   end
 
   add_index "interiors", ["user_id"], :name => "index_interiors_on_user_id"
+
+  create_table "taggings", :force => true do |t|
+    t.integer  "interior_id"
+    t.integer  "category_tag_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "taggings", ["category_tag_id"], :name => "index_taggings_on_category_tag_id"
+  add_index "taggings", ["interior_id"], :name => "index_taggings_on_interior_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

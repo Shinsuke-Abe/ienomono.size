@@ -51,4 +51,8 @@ FactoryGirl.define do
     password "nemo9999"
     password_confirmation "nemo9999"
   end
+
+  factory :category_tag do
+    sequence(:name) {|n| "tag name #{n}"}
+  end
 end
