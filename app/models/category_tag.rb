@@ -11,4 +11,12 @@ class CategoryTag < ActiveRecord::Base
       find(:all, conditions: ["user_id is null"])
     end
   end
+
+  def self.find_tag(tag_name, user = nil)
+    if user
+      find(:all, conditions: ["(user_id is null or user_id = ?) and name = ?", user.id, tag_name]).first
+    else
+      find(:all, conditions: ["user_id is null and name = ?", tag_name]).first
+    end
+  end
 end
