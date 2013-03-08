@@ -89,12 +89,6 @@ describe CategoryTag do
     end
   end
 
-  describe "self.create_tagging_list" do
-    it "should description" do
-      # TODO
-    end
-  end
-
   after do
     FactoryGirl.reload
   end

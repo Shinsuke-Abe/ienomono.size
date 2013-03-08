@@ -21,6 +21,12 @@ describe Interior do
     end
   end
 
+  describe ".tags_string" do
+    it "タグの設定がない場合はbrankがtrueになる" do
+      expect(@target_interior.tags_string.blank?).to be_true
+    end
+  end
+
   after do
     FactoryGirl.reload
   end

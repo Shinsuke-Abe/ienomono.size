@@ -43,4 +43,18 @@ class User < ActiveRecord::Base
 
     interior
   end
+
+  def create_tagging_list(tag_list)
+    tagging_list = []
+
+    tag_list.each do |tag|
+      if category_tag = CategoryTag.find_tag(tag, self)
+        tagging_list << category_tag
+      else
+        tagging_list << self.category_tags.build(name: tag)
+      end
+    end
+
+    tagging_list
+  end
 end

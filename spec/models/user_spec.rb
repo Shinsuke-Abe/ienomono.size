@@ -110,6 +110,32 @@ describe User do
     end
   end
 
+  describe ".create_tagging_list" do
+    before do
+      @first_user = FactoryGirl.create(:first_user)
+    end
+
+    it "存在しないタグを指定した場合は新しいレコードを返す" do
+      actual_list = @first_user.create_tagging_list(["タグ1"])
+
+      expect_to_create_tagging_list(actual_list, "タグ1", @first_user.id)
+    end
+
+    it "存在するタグを指定した場合はそのレコードを返す" do
+      user_category_tag = FactoryGirl.create_list(:category_tag, 4, user: @first_user)
+
+      actual_list = @first_user.create_tagging_list([user_category_tag[2].name])
+
+      expect_to_create_tagging_list(actual_list, user_category_tag[2].name, @first_user.id)
+    end
+
+    def expect_to_create_tagging_list(actual_list, expect_name, expect_user_id)
+      actual_list.should have_exactly(1).items
+      actual_list[0].name.should == expect_name
+      actual_list[0].user_id.should == expect_user_id
+    end
+  end
+
   after do
     FactoryGirl.reload
   end
