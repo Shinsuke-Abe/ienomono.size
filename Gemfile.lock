@@ -94,6 +94,8 @@ GEM
       activesupport (= 3.2.11)
       bundler (~> 1.0)
       railties (= 3.2.11)
+    rails3-jquery-autocomplete (1.0.11)
+      rails (~> 3.0)
     railties (3.2.11)
       actionpack (= 3.2.11)
       activesupport (= 3.2.11)
@@ -166,6 +168,7 @@ DEPENDENCIES
   factory_girl
   jquery-rails
   rails (= 3.2.11)
+  rails3-jquery-autocomplete
   rspec-rails (~> 2.0)
   sass-rails (~> 3.2.3)
   simple_form

@@ -59,3 +59,6 @@ gem 'devise'
 
 # TO use action_args
 gem 'action_args'
+
+# To use auto complete
+gem 'rails3-jquery-autocomplete'
