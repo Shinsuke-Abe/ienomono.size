@@ -36,4 +36,27 @@ class InteriorsController < ApplicationController
 
     redirect_to interiors_url
   end
+
+  # GET /interiors/1/edit_tags
+  def edit_tags(id)
+    render_js_request current_user.interiors.find(id)
+  end
+
+  def update_tags(id, interior)
+    current_interior = current_user.interiors.find(id)
+    current_interior.category_tags = current_user.create_tagging_list(interior[:joined_tags].split(","))
+
+    if current_interior.save
+      flash[:notice] = "Update tagging was successfully."
+      render js: "window.location = '#{interior_path(id)}'"
+    else
+      render_js_request current_interior
+    end
+  end
+
+  private
+  def render_js_request(interior)
+    html = render_to_string partial: 'tagging_form', locals: {interior: interior}
+    render json: {html: html}
+  end
 end

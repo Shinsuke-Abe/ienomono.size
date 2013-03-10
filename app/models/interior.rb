@@ -5,7 +5,14 @@ class Interior < ActiveRecord::Base
   has_many :category_tags, :through=>:taggings
   accepts_nested_attributes_for :interior_histories
 
-  attr_accessible :name
+  attr_accessible :name, :joined_tags
+  attr_accessor :joined_tags
+
+  after_initialize :do_as_after_initialize
+
+  def do_as_after_initialize
+    self.joined_tags ||= tags_string
+  end
 
   def latest_history
     interior_histories.first

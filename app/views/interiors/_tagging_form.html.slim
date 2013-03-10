@@ -1,0 +1,4 @@
+= simple_form_for interior, url: {action: "update_tags"}, html: {method: :put}, remote: true do |f|
+  = f.input :joined_tags
+  = f.button :submit
+= link_to 'キャンセル', interior_path(interior)

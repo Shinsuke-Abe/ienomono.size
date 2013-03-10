@@ -108,6 +108,27 @@ describe User do
       interior.name.should == interior_data[:name]
       expect(interior.interior_histories.blank?).to be_true
     end
+
+    it "タグ文字列を指定しているインテリアモデルを生成する" do
+      expect_to_build_interior_with_tagging(
+        name: "テストインテリア",
+        joined_tags: "タグ1,タグ2,タグ3"
+      )
+    end
+
+    it "カンマで終わるタグ文字列を指定しているインテリアモデルを生成する" do
+      expect_to_build_interior_with_tagging(
+        name: "テストインテリア",
+        joined_tags: "タグ1,タグ2,タグ3,"
+      )
+    end
+
+    def expect_to_build_interior_with_tagging(interior_data)
+      interior = @first_user.build_interior_with_history(interior_data)
+
+      interior.name.should == interior_data[:name]
+      interior.category_tags.should have_exactly(3).tags
+    end
   end
 
   describe ".create_tagging_list" do

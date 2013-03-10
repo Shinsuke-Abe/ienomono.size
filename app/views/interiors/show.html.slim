@@ -22,6 +22,10 @@ p#item_name
       b Memo
       = @interior.latest_history.memo_text
 #history_form
+#taggings
+  b Tags
+  = @interior.joined_tags
+  = link_to 'Edit Taggings', edit_tags_interior_path(@interior), id: 'edit_taggings', remote: true
 - if @interior.interior_histories.length >= 2
   = link_to 'Show older history...', interior_interior_histories_path(@interior)
 

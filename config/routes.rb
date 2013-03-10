@@ -2,6 +2,10 @@ IenomonoSize::Application.routes.draw do
   get "interior_histories/index"
 
   resources :interiors do
+    member do
+      get 'edit_tags'
+      put 'update_tags'
+    end
     resources :interior_histories
   end
 

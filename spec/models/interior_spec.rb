@@ -3,8 +3,8 @@ require 'spec_helper'
 
 describe Interior do
   before do
-    first_user = FactoryGirl.create(:first_user_with_interiors)
-    @target_interior = first_user.interiors.first
+    @first_user = FactoryGirl.create(:first_user_with_interiors)
+    @target_interior = @first_user.interiors.first
   end
 
   describe ".latest_history" do
@@ -24,6 +24,25 @@ describe Interior do
   describe ".tags_string" do
     it "タグの設定がない場合はbrankがtrueになる" do
       expect(@target_interior.tags_string.blank?).to be_true
+    end
+  end
+
+  describe "初期化" do
+    it "タグの設定がない場合はjoined_tags項目が空になる" do
+      new_interior = Interior.new
+
+      expect(new_interior.joined_tags.blank?).to be_true
+    end
+
+    it "タグの指定があるオブジェクトを取得した場合はjoined_tags項目が取得できる" do
+      tag_list = FactoryGirl.create_list(:category_tag, 2, user: nil)
+      tag_list += FactoryGirl.create_list(:category_tag, 3, user: @first_user)
+      @target_interior.category_tags = tag_list
+      # @target_interior.save
+
+      actual_interior = Interior.find(@target_interior.id)
+
+      actual_interior.joined_tags.should == tag_list.map{|tag| tag.name}.join(",")
     end
   end
 

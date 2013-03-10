@@ -3,32 +3,33 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $ ->
+  get_html_from_ajax_response=(ajax) ->
+    response = $.parseJSON(ajax.responseText)
+    response.html
+
+  update_history_form=(ajax) ->
+    #フォーム領域を書き換え
+    $('#history_form').html get_html_from_ajax_response ajax
+    $('#latest_history').css('display', 'none')
+
   $('#new_history')
     .on 'ajax:complete', (event, ajax, status) ->
-      response = $.parseJSON(ajax.responseText)
-      html = response.html
-
-      # 領域を書き換え
-      $('#history_form').html html
-      $('#latest_history').css('display', 'none')
+      update_history_form ajax
     .on 'ajax:error', (event) ->
       $('#history_form').append "エラー"
 
   $('#edit_history')
     .on 'ajax:complete', (event, ajax, status) ->
-      response = $.parseJSON(ajax.responseText)
-      html = response.html
-
-      # フォームの置き換え
-      $('#history_form').html html
-      $('#latest_history').css('display', 'none')
+      update_history_form ajax
     .on 'ajax:error', (event) ->
       $('#history_form').append "エラー"
 
+  $('#edit_taggings')
+    .on 'ajax:complete', (event, ajax, status) ->
+      $('#taggings').html get_html_from_ajax_response ajax
+    .on 'ajax:error', (event) ->
+      $('#taggings').append "エラー"
+
   $('#history_form')
     .on 'ajax:complete', (event, ajax, status) ->
-      response = $.parseJSON(ajax.responseText)
-      html = response.html
-
-      # エラーフォームへの置きかえ
-      $('#history_form').html html
+      $('#history_form').html get_html_from_ajax_response ajax
