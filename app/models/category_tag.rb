@@ -4,19 +4,11 @@ class CategoryTag < ActiveRecord::Base
   has_many :interiors, :through=>:taggings
   attr_accessible :name
 
-  def self.enable_tags(user = nil)
-    if user
-      find(:all, conditions: ["user_id is null or user_id = ?", user.id])
-    else
-      find(:all, conditions: ["user_id is null"])
-    end
-  end
+  scope :enable_tags, lambda {|user = nil|
+    user.blank? ? {conditions: ["user_id is null"]} : {conditions: ["user_id is null or user_id = ?", user.id]}
+  }
 
   def self.find_tag(tag_name, user = nil)
-    if user
-      find(:all, conditions: ["(user_id is null or user_id = ?) and name = ?", user.id, tag_name]).first
-    else
-      find(:all, conditions: ["user_id is null and name = ?", tag_name]).first
-    end
+    self.enable_tags(user).where("name = ?", tag_name).first
   end
 end
