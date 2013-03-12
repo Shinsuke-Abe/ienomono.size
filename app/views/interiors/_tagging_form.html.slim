@@ -1,4 +1,4 @@
 = simple_form_for interior, url: {action: "update_tags"}, html: {method: :put}, remote: true do |f|
-  = f.input :joined_tags
+  = f.input :joined_tags, url: autocomplete_category_tag_name_interiors_path, as: :autocomplete, input_html: {:'data-delimiter' => ',', multiple: true}
   = f.button :submit
 = link_to 'キャンセル', interior_path(interior)

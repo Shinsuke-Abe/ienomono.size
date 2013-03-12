@@ -7,6 +7,7 @@ IenomonoSize::Application.routes.draw do
       put 'update_tags'
     end
     resources :interior_histories
+    get :autocomplete_category_tag_name, :on => :collection
   end
 
 

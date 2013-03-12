@@ -54,6 +54,15 @@ class InteriorsController < ApplicationController
     end
   end
 
+
+  autocomplete :category_tag, :name
+
+  # オートコンプリートの結果にフィルターをかけるためにオーバーライド
+  def get_autocomplete_items(parameters)
+    items = super(parameters)
+    items = items.enable_tags(current_user)
+  end
+
   private
   def render_js_request(interior)
     html = render_to_string partial: 'tagging_form', locals: {interior: interior}
