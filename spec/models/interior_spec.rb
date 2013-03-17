@@ -87,16 +87,18 @@ describe Interior do
       tag_list = FactoryGirl.create_list(:category_tag, 2, user: nil)
       tag_list += FactoryGirl.create_list(:category_tag, 3, user: @first_user)
       @target_interior.category_tags = tag_list
+      @target_interior.save
 
       mask_user_id = @first_user.id
 
-      actual_interiors = Interior.search do
-        query {string '"tag name 1"'}
+      actual_interiors = Interior.search load: true do
+        query {string '"tag"'}
 
         filter :terms, user_id: [mask_user_id]
       end
 
       actual_interiors.size.should == 1
+      actual_interiors.first.id.should == @target_interior.id
     end
   end
 

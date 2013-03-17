@@ -5,11 +5,18 @@ class Interior < ActiveRecord::Base
   has_many :category_tags, :through=>:taggings
   accepts_nested_attributes_for :interior_histories
 
+  attr_accessible :name, :joined_tags
+  attr_accessor :joined_tags
+
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
-  attr_accessible :name, :joined_tags
-  attr_accessor :joined_tags
+  mapping do
+    indexes :name, type: :string
+    indexes :user_id, type: :integer
+    indexes :tags_string, as: 'tags_string'
+  end
+
 
   after_initialize :do_as_after_initialize
 

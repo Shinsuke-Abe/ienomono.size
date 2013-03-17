@@ -1,7 +1,7 @@
 class CategoryTag < ActiveRecord::Base
   belongs_to :user
   has_many :taggings
-  has_many :interiors, :through=>:taggings
+  has_many :interiors, through: :taggings
   attr_accessible :name
 
   scope :enable_tags, lambda {|user = nil|
