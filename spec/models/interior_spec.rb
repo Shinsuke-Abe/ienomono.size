@@ -46,6 +46,60 @@ describe Interior do
     end
   end
 
+  describe "全文検索" do
+    it "インテリアの名前を検索できる" do
+      actual_interiors = Interior.search('"interior name 1"', load: true)
+
+      actual_interiors.length.should == 1
+      actual_interiors.first.id.should == @target_interior.id
+      actual_interiors.first.name.should == @target_interior.name
+    end
+
+    it "ヒットしない条件ではリストのサイズが0になる" do
+      actual_interiors = Interior.search('"not found name"', load: true)
+
+      actual_interiors.length.should == 0
+    end
+
+    it "複数ユーザにわたるインデックスを検索できる" do
+      second_user = FactoryGirl.create(:second_user_with_interiors)
+
+      expect_size = @first_user.interiors.size + second_user.interiors.size
+
+      Interior.search("interior name").size.should == expect_size
+    end
+
+    it "ユーザIDでフィルターをかける" do
+      FactoryGirl.create(:second_user_with_interiors)
+
+      mask_user_id = @first_user.id
+
+      actual_interiors = Interior.search do
+        query {string '"interior name"'}
+
+        filter :terms, user_id: [mask_user_id]
+      end
+
+      actual_interiors.size.should == @first_user.interiors.size
+    end
+
+    it "関連づけているタグも検索可能" do
+      tag_list = FactoryGirl.create_list(:category_tag, 2, user: nil)
+      tag_list += FactoryGirl.create_list(:category_tag, 3, user: @first_user)
+      @target_interior.category_tags = tag_list
+
+      mask_user_id = @first_user.id
+
+      actual_interiors = Interior.search do
+        query {string '"tag name 1"'}
+
+        filter :terms, user_id: [mask_user_id]
+      end
+
+      actual_interiors.size.should == 1
+    end
+  end
+
   after do
     FactoryGirl.reload
   end

@@ -55,4 +55,8 @@ FactoryGirl.define do
   factory :category_tag do
     sequence(:name) {|n| "tag name #{n}"}
   end
+
+  factory :search_tag, class: CategoryTag do
+    sequence(:name) {|n| "search_tag #{n}"}
+  end
 end
