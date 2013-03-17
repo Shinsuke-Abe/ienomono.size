@@ -15,7 +15,13 @@ class Interior < ActiveRecord::Base
     indexes :name, type: :string
     indexes :user_id, type: :integer
     indexes :tags_string, as: 'tags_string'
+
+    indexes :interior_histories do
+      indexes :memo_text, type: :text
+    end
   end
+
+  after_touch() { tire.update_index }
 
 
   after_initialize :do_as_after_initialize
