@@ -11,18 +11,17 @@ class Interior < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
+  after_touch() { tire.update_index }
+
   mapping do
     indexes :name, type: :string
     indexes :user_id, type: :integer
     indexes :tags_string, as: 'tags_string'
 
     indexes :interior_histories do
-      indexes :memo_text, type: :text
+      indexes :memo_text, type: :string
     end
   end
-
-  after_touch() { tire.update_index }
-
 
   after_initialize :do_as_after_initialize
 

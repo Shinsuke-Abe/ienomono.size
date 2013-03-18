@@ -100,6 +100,31 @@ describe Interior do
       actual_interiors.size.should == 1
       actual_interiors.first.id.should == @target_interior.id
     end
+
+    it "メモを検索可能" do
+      history = @target_interior.interior_histories.build(
+        width: 21.0,
+        memo_text: "memo text")
+      history.save
+
+      @target_interior.reload
+
+      p @target_interior.class.tire.mapping
+      p @target_interior.to_hash
+
+      hoge_interior = Interior.find(@target_interior.id)
+      p hoge_interior.to_hash
+
+      mask_user_id = @first_user.id
+
+      actual_interiors = Interior.search load: true do
+        query {string '"memo"'}
+
+        filter :terms, user_id: [mask_user_id]
+      end
+
+      actual_interiors.size.should == 1
+    end
   end
 
   after do
