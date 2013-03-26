@@ -8,22 +8,6 @@ class Interior < ActiveRecord::Base
   attr_accessible :name, :joined_tags
   attr_accessor :joined_tags
 
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
-
-  mapping do
-    indexes :name, type: :string
-    indexes :user_id, type: :integer
-    indexes :tags_string, as: 'tags_string'
-
-    indexes :interior_histories do
-      indexes :memo_text, type: :text
-    end
-  end
-
-  after_touch() { tire.update_index }
-
-
   after_initialize :do_as_after_initialize
 
   def do_as_after_initialize
