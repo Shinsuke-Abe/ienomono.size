@@ -21,4 +21,8 @@ class Interior < ActiveRecord::Base
   def tags_string
     category_tags.map{|tag| tag.name}.join(",")
   end
+
+  def self.find_by_tagging(user, tag_list)
+    self.joins(:taggings).where("taggings.category_tag_id in (?) and interiors.user_id = ?", tag_list, user.id)
+  end
 end
