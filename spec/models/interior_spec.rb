@@ -47,29 +47,42 @@ describe Interior do
   end
 
   describe ".find_by_tagging" do
-    it "タグ付けされているインテリアが検索される(1個)" do
-      tag_list = FactoryGirl.create_list(:category_tag, 3, user: @first_user)
-      @target_interior.category_tags = tag_list
+    it "1個のタグで検索する" do
+      add_tag_list_to_interior!(@target_interior, 3, @first_user)
 
-      actual_interior = Interior.find_by_tagging(@first_user, [tag_list.first.id])
-      actual_interior.first.id.should == @target_interior.id
+      actual_interiors = Interior.find_by_tagging(
+        @first_user,
+        [@target_interior.category_tags.first.id])
+      actual_interiors.first.id.should == @target_interior.id
     end
 
-    it "タグ付けされているインテリアが検索される(複数)" do
-      tag_list_for_first_interior = FactoryGirl.create_list(:category_tag, 1, user: @first_user)
-      tag_list_for_another_interior = FactoryGirl.create_list(:category_tag, 2, user: @first_user)
+    it "それぞれ一つのインテリアにマッチする複数のタグで検索する" do
+      add_tag_list_to_interior!(@target_interior, 1, @first_user)
+      add_tag_list_to_interior!(@first_user.interiors[1], 2, @first_user)
 
-      @target_interior.category_tags = tag_list_for_first_interior
-      @first_user.interiors[1].category_tags = tag_list_for_another_interior
+      actual_interiors = Interior.find_by_tagging(
+        @first_user,
+        [@target_interior.category_tags.first.id,
+         @first_user.interiors[1].category_tags.first.id])
+      actual_interiors.length.should == 2
+    end
 
-      actual_interiors = Interior.find_by_tagging(@first_user, [tag_list_for_first_interior.first.id, tag_list_for_another_interior.first.id])
-      actual_interiors.size.should == 2
+    it "一つのインテリアにマッチする複数のタグで検索する" do
+      add_tag_list_to_interior!(@target_interior, 5, @first_user)
+
+      actual_interiors = Interior.find_by_tagging(@first_user, [2,3])
+      actual_interiors.length.should == 1
     end
 
     it "タグ付けされていない物は検索されない" do
       actual_interiors = Interior.find_by_tagging(@first_user, [1,2])
 
       actual_interiors.should be_empty
+    end
+
+    def add_tag_list_to_interior!(interior, count, user)
+      tag_list = FactoryGirl.create_list(:category_tag, count, user: user)
+      interior.category_tags = tag_list
     end
   end
 

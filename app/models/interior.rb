@@ -23,6 +23,6 @@ class Interior < ActiveRecord::Base
   end
 
   def self.find_by_tagging(user, tag_list)
-    self.joins(:taggings).where("taggings.category_tag_id in (?) and interiors.user_id = ?", tag_list, user.id)
+    self.joins(:taggings).where("taggings.category_tag_id in (?) and interiors.user_id = ?", tag_list, user.id).uniq{|interior| interior.id}
   end
 end
