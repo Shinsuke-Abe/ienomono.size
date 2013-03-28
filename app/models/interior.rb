@@ -23,6 +23,10 @@ class Interior < ActiveRecord::Base
   end
 
   def self.find_by_tagging(user, tag_list)
-    self.joins(:taggings).where("taggings.category_tag_id in (?) and interiors.user_id = ?", tag_list, user.id).uniq{|interior| interior.id}
+    joins(:taggings).where("taggings.category_tag_id in (?) and interiors.user_id = ?", tag_list, user.id).uniq
+  end
+
+  def self.find_by_memo_text(user, search_text)
+    joins(:interior_histories).where("interior_histories.memo_text like ? and interiors.user_id = ?", "%#{search_text}%", user.id).uniq
   end
 end

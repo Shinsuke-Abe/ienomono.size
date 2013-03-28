@@ -8,6 +8,13 @@ FactoryGirl.define do
     sequence(:width) {|n| 1.2 + n}
   end
 
+  factory :interior_history_for_search, class: InteriorHistory do
+    sequence(:start_date) {|n| Date.today - n}
+    height 35.5
+    width 15.5
+    memo_text "初めて買った机\n大事な物"
+  end
+
   factory :interior do
     sequence(:name) {|n| "interior name #{n}"}
   end

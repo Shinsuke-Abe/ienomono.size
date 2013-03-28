@@ -71,6 +71,7 @@ describe Interior do
       add_tag_list_to_interior!(@target_interior, 5, @first_user)
 
       actual_interiors = Interior.find_by_tagging(@first_user, [2,3])
+
       actual_interiors.length.should == 1
     end
 
@@ -83,6 +84,29 @@ describe Interior do
     def add_tag_list_to_interior!(interior, count, user)
       tag_list = FactoryGirl.create_list(:category_tag, count, user: user)
       interior.category_tags = tag_list
+    end
+  end
+
+  describe ".find_by_memo_text" do
+    it "履歴のメモに検索文字が含まれているインテリアを取得可能" do
+      FactoryGirl.create_list(:interior_history, 4, interior: @target_interior)
+      FactoryGirl.create_list(:interior_history_for_search, 1, interior: @target_interior)
+
+      actual_interiors = Interior.find_by_memo_text(@first_user, "机")
+      actual_interiors.length.should == 1
+      actual_interiors.first.id.should == @target_interior.id
+    end
+
+    it "履歴がないものは検索されない" do
+      actual_interiors = Interior.find_by_memo_text(@first_user, "not found")
+      actual_interiors.should be_empty
+    end
+
+    it "マッチしない文字列は検索されない" do
+      FactoryGirl.create_list(:interior_history, 4, interior: @target_interior)
+
+      actual_interiors = Interior.find_by_memo_text(@first_user, "not found")
+      actual_interiors.should be_empty
     end
   end
 
