@@ -110,6 +110,24 @@ describe Interior do
     end
   end
 
+  describe ".list_users_have" do
+    before do
+      FactoryGirl.create(:second_user_with_interiors)
+    end
+
+    it "ユーザを指定しない場合は全レコード検索" do
+      actual_list = Interior.list_users_have()
+
+      expect(actual_list.length).to eq Interior.find(:all).length
+    end
+
+    it "ユーザを指定した場合は指定したユーザで検索" do
+      actual_list = Interior.list_users_have(@first_user)
+
+      expect(actual_list.length).to eq Interior.where(["user_id = ?", @first_user.id]).length
+    end
+  end
+
   after do
     FactoryGirl.reload
   end
