@@ -54,6 +54,16 @@ class InteriorsController < ApplicationController
     end
   end
 
+  def search_by_tags
+    # TODO 入力されたタグ名から存在するタグIDのリスト取得
+  end
+
+  def search_by_memo_text(search_memo)
+    @search_memo = search_memo
+    @interiors = Interior.find_by_memo_text(current_user, search_memo)
+    render action: "index"
+  end
+
 
   autocomplete :category_tag, :name
 

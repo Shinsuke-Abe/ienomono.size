@@ -1,5 +1,17 @@
 h1 Listing interiors
 
+= form_tag url_for(action: "search_by_tags"), method: "post" do
+  = label_tag :search_tags, "検索タグ"
+  = text_field_tag :search_tags
+  = submit_tag "検索"
+
+= form_tag url_for(action: "search_by_memo_text"), method: "post" do
+  = label_tag :search_memo, "検索文字列"
+  = text_field_tag :search_memo, @search_memo
+  = submit_tag "検索"
+
+= link_to "検索条件クリア", interiors_path
+
 table
   tr
     th Name
