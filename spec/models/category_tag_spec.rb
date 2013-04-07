@@ -89,6 +89,30 @@ describe CategoryTag do
     end
   end
 
+  describe "self.find_tag_id_list" do
+    before do
+      FactoryGirl.create_list(:category_tag, 3, user: @first_user)
+      @search_tags = FactoryGirl.create_list(:search_tag, 4, user: @first_user)
+    end
+    it "タグ名が全て見つかる場合は引数のリストとサイズが一致する" do
+      actual_list = CategoryTag.find_tag_id_list(@search_tags.map{|tag| tag.name}, @first_user)
+      expect(actual_list.length).to eq @search_tags.length
+    end
+
+    it "見つからないタグ名が有る場合は引数のリストとサイズが一致しない" do
+      expect_tags = @search_tags.map{|tag| tag.name}
+      expect_tags << "not_found_tag"
+
+      actual_list = CategoryTag.find_tag_id_list(expect_tags, @first_user)
+      expect(actual_list.length).to eq (expect_tags.length - 1)
+    end
+
+    it "タグを指定しなかった場合" do
+      expect(CategoryTag.find_tag_id_list(nil, @first_user)).to be_nil
+      expect(CategoryTag.find_tag_id_list([], @first_user)).to be_nil
+    end
+  end
+
   after do
     FactoryGirl.reload
   end

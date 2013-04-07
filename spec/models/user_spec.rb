@@ -2,13 +2,15 @@
 require 'spec_helper'
 
 describe User do
+  before do
+    @first_user = FactoryGirl.create(:first_user)
+  end
+
   describe ".find_for_database_authentication" do
     it "login条件にメールアドレスを指定して取得できる" do
-      first_user = FactoryGirl.create(:first_user)
+      actual = User.find_for_database_authentication(login: @first_user.email)
 
-      actual = User.find_for_database_authentication(login: first_user.email)
-
-      actual.id.should == first_user.id
+      actual.id.should == @first_user.id
     end
 
     it "login条件に名前を指定して取得できる" do
@@ -20,8 +22,6 @@ describe User do
     end
 
     it "login条件にメールアドレスも名前もマッチしない場合は取得できない" do
-      first_user = FactoryGirl.create(:first_user)
-
       actual = User.find_for_database_authentication(login: "no_user")
 
       actual.should be_nil
@@ -30,9 +30,7 @@ describe User do
 
   describe ".welcome_name" do
     it "名前がある場合は名前優先" do
-      first_user = FactoryGirl.create(:first_user)
-
-      first_user.welcome_name.should == first_user.user_name
+      @first_user.welcome_name.should == @first_user.user_name
     end
 
     it "名前がない場合はメールアドレスが返る" do
@@ -43,10 +41,6 @@ describe User do
   end
 
   describe ".build_interior_with_history" do
-    before do
-      @first_user = FactoryGirl.create(:first_user)
-    end
-
     it "履歴を一緒に持つインテリアモデルのインスタンスを生成する" do
       expect_to_has_history(
         name: "テストインテリア",
@@ -132,10 +126,6 @@ describe User do
   end
 
   describe ".create_tagging_list" do
-    before do
-      @first_user = FactoryGirl.create(:first_user)
-    end
-
     it "存在しないタグを指定した場合は新しいレコードを返す" do
       actual_list = @first_user.create_tagging_list(["タグ1"])
 

@@ -54,12 +54,19 @@ class InteriorsController < ApplicationController
     end
   end
 
-  def search_by_tags
-    # TODO 入力されたタグ名から存在するタグIDのリスト取得
+  def search_by_tags(search_tags)
+    # 入力した検索条件を退避
+    @search_tags = search_tags
+
+    selected_tag_ids = CategoryTag.find_tag_id_list(search_tags.split(","), current_user)
+    @interiors = Interior.find_by_tagging(current_user, selected_tag_ids)
+    render action: "index"
   end
 
   def search_by_memo_text(search_memo)
+    # 入力した検索条件を退避
     @search_memo = search_memo
+
     @interiors = Interior.find_by_memo_text(current_user, search_memo)
     render action: "index"
   end

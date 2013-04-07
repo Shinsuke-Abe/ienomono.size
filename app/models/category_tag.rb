@@ -15,4 +15,10 @@ class CategoryTag < ActiveRecord::Base
   def self.find_tag(tag_name, user = nil)
     enable_tags(user).where("name = ?", tag_name).first
   end
+
+  def self.find_tag_id_list(tag_name_list, user = nil)
+    if tag_name_list.present?
+      select("id").enable_tags(user).where("name in (?)", tag_name_list)
+    end
+  end
 end
