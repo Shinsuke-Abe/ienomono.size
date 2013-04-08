@@ -20,7 +20,7 @@ class InteriorsController < ApplicationController
 
   # POST /interiors
   def create(interior)
-    @interior = current_user.build_interior_with_history(interior)
+    @interior = current_user.build_interior_with_history_and_tagging(interior)
 
     if @interior.save
       redirect_to @interior, notice: 'Interior was successfully created.'
@@ -44,7 +44,7 @@ class InteriorsController < ApplicationController
 
   def update_tags(id, interior)
     current_interior = current_user.interiors.find(id)
-    current_interior.category_tags = current_user.create_tagging_list(interior[:joined_tags].split(","))
+    current_interior.category_tags = current_user.create_tagging_list(interior[:joined_tags])
 
     if current_interior.save
       flash[:notice] = "Update tagging was successfully."
@@ -58,8 +58,8 @@ class InteriorsController < ApplicationController
     # 入力した検索条件を退避
     @search_tags = search_tags
 
-    selected_tag_ids = CategoryTag.find_tag_id_list(search_tags.split(","), current_user)
-    @interiors = Interior.find_by_tagging(current_user, selected_tag_ids)
+    selected_tag_ids = CategoryTag.find_tag_id_list(search_tags, current_user)
+    @interiors = Interior.search_by_tagging(current_user, selected_tag_ids)
     render action: "index"
   end
 
@@ -67,7 +67,7 @@ class InteriorsController < ApplicationController
     # 入力した検索条件を退避
     @search_memo = search_memo
 
-    @interiors = Interior.find_by_memo_text(current_user, search_memo)
+    @interiors = Interior.search_by_memo_text(current_user, search_memo)
     render action: "index"
   end
 

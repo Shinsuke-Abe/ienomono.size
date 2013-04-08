@@ -29,21 +29,19 @@ class User < ActiveRecord::Base
     end
   end
 
-  def build_interior_with_history(interior_data)
+  def build_interior_with_history_and_tagging(interior_data)
     new_interior_data = interior_data.dup
 
     new_history = new_interior_data.delete(:interior_history)
     new_joined_tag = new_interior_data.delete(:joined_tags)
 
     interior = interiors.build(new_interior_data)
-    if new_history and
-       (new_history[:width].present? or new_history[:height].present? or new_history[:depth].present?)
-      new_history[:start_date] = Date.today
+    if new_history
       interior.interior_histories.build(new_history)
     end
 
     if new_joined_tag and new_joined_tag.present?
-      interior.category_tags = create_tagging_list(new_joined_tag.split(","))
+      interior.category_tags = create_tagging_list(new_joined_tag)
     end
 
     interior
@@ -52,7 +50,7 @@ class User < ActiveRecord::Base
   def create_tagging_list(tag_list)
     tagging_list = []
 
-    tag_list.each do |tag|
+    tag_list.split(",").each do |tag|
       if category_tag = CategoryTag.find_tag(tag, self)
         tagging_list << category_tag
       else

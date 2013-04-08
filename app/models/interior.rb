@@ -28,11 +28,11 @@ class Interior < ActiveRecord::Base
     category_tags.map{|tag| tag.name}.join(",")
   end
 
-  def self.find_by_tagging(user, tag_list)
+  def self.search_by_tagging(user, tag_list)
     list_users_have(user).joins(:taggings).where("taggings.category_tag_id in (?)", tag_list).uniq
   end
 
-  def self.find_by_memo_text(user, search_text)
+  def self.search_by_memo_text(user, search_text)
     list_users_have(user).joins(:interior_histories).where("interior_histories.memo_text like ?", "%#{search_text}%").uniq
   end
 end

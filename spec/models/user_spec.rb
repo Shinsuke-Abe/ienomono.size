@@ -40,7 +40,7 @@ describe User do
     end
   end
 
-  describe ".build_interior_with_history" do
+  describe ".build_interior_with_history_and_tagging" do
     it "履歴を一緒に持つインテリアモデルのインスタンスを生成する" do
       expect_to_has_history(
         name: "テストインテリア",
@@ -62,11 +62,11 @@ describe User do
     end
 
     def expect_to_has_history(interior_data)
-      interior = @first_user.build_interior_with_history(interior_data)
+      interior = @first_user.build_interior_with_history_and_tagging(interior_data)
 
       interior.name.should == interior_data[:name]
       interior.interior_histories.size.should == 1
-      interior.interior_histories.first.start_date.should == Date.today
+      interior.interior_histories.first.start_date.should be_nil
       interior.interior_histories.first.width.should == interior_data[:interior_history][:width].to_f
       interior.interior_histories.first.height.should == interior_data[:interior_history][:height].to_f
       interior.interior_histories.first.depth.should == interior_data[:interior_history][:depth].to_f
@@ -77,7 +77,7 @@ describe User do
     end
 
     it "履歴のデータが全て入力されていない場合は履歴オブジェクトを持たないインテリアモデルを生成する" do
-      expect_to_has_no_history(
+      expect_to_has_empty_history(
         name: "テストインテリア",
         interior_history: {
           width: nil,
@@ -87,7 +87,7 @@ describe User do
     end
 
     it "履歴のデータが全て空文字の場合は履歴オブジェクトを持たないインテリアモデルを生成する" do
-      expect_to_has_no_history(
+      expect_to_has_empty_history(
         name: "テストインテリア",
         interior_history: {
           width: "",
@@ -97,10 +97,23 @@ describe User do
     end
 
     def expect_to_has_no_history(interior_data)
-      interior = @first_user.build_interior_with_history(interior_data)
+      interior = @first_user.build_interior_with_history_and_tagging(interior_data)
 
       interior.name.should == interior_data[:name]
       expect(interior.interior_histories.blank?).to be_true
+    end
+
+    def expect_to_has_empty_history(interior_data)
+      interior = @first_user.build_interior_with_history_and_tagging(interior_data)
+
+      interior.name.should == interior_data[:name]
+      interior.interior_histories.size.should == 1
+      interior.interior_histories.first.start_date.should be_nil
+      interior.interior_histories.first.width.should be_nil
+      interior.interior_histories.first.height.should be_nil
+      interior.interior_histories.first.depth.should be_nil
+
+      expect(interior.invalid?).to be_true
     end
 
     it "タグ文字列を指定しているインテリアモデルを生成する" do
@@ -118,7 +131,7 @@ describe User do
     end
 
     def expect_to_build_interior_with_tagging(interior_data)
-      interior = @first_user.build_interior_with_history(interior_data)
+      interior = @first_user.build_interior_with_history_and_tagging(interior_data)
 
       interior.name.should == interior_data[:name]
       interior.category_tags.should have_exactly(3).tags
@@ -127,7 +140,7 @@ describe User do
 
   describe ".create_tagging_list" do
     it "存在しないタグを指定した場合は新しいレコードを返す" do
-      actual_list = @first_user.create_tagging_list(["タグ1"])
+      actual_list = @first_user.create_tagging_list("タグ1")
 
       expect_to_create_tagging_list(actual_list, "タグ1", @first_user.id)
     end
@@ -135,7 +148,7 @@ describe User do
     it "存在するタグを指定した場合はそのレコードを返す" do
       user_category_tag = FactoryGirl.create_list(:category_tag, 4, user: @first_user)
 
-      actual_list = @first_user.create_tagging_list([user_category_tag[2].name])
+      actual_list = @first_user.create_tagging_list(user_category_tag[2].name)
 
       expect_to_create_tagging_list(actual_list, user_category_tag[2].name, @first_user.id)
     end

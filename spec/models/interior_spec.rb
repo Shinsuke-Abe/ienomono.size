@@ -46,11 +46,11 @@ describe Interior do
     end
   end
 
-  describe ".find_by_tagging" do
+  describe ".search_by_tagging" do
     it "1個のタグで検索する" do
       add_tag_list_to_interior!(@target_interior, 3, @first_user)
 
-      actual_interiors = Interior.find_by_tagging(
+      actual_interiors = Interior.search_by_tagging(
         @first_user,
         [@target_interior.category_tags.first.id])
       actual_interiors.first.id.should == @target_interior.id
@@ -60,7 +60,7 @@ describe Interior do
       add_tag_list_to_interior!(@target_interior, 1, @first_user)
       add_tag_list_to_interior!(@first_user.interiors[1], 2, @first_user)
 
-      actual_interiors = Interior.find_by_tagging(
+      actual_interiors = Interior.search_by_tagging(
         @first_user,
         [@target_interior.category_tags.first.id,
          @first_user.interiors[1].category_tags.first.id])
@@ -70,13 +70,13 @@ describe Interior do
     it "一つのインテリアにマッチする複数のタグで検索する" do
       add_tag_list_to_interior!(@target_interior, 5, @first_user)
 
-      actual_interiors = Interior.find_by_tagging(@first_user, [2,3])
+      actual_interiors = Interior.search_by_tagging(@first_user, [2,3])
 
       actual_interiors.length.should == 1
     end
 
     it "タグ付けされていない物は検索されない" do
-      actual_interiors = Interior.find_by_tagging(@first_user, [1,2])
+      actual_interiors = Interior.search_by_tagging(@first_user, [1,2])
 
       actual_interiors.should be_empty
     end
@@ -87,25 +87,25 @@ describe Interior do
     end
   end
 
-  describe ".find_by_memo_text" do
+  describe ".search_by_memo_text" do
     it "履歴のメモに検索文字が含まれているインテリアを取得可能" do
       FactoryGirl.create_list(:interior_history, 4, interior: @target_interior)
       FactoryGirl.create_list(:interior_history_for_search, 1, interior: @target_interior)
 
-      actual_interiors = Interior.find_by_memo_text(@first_user, "机")
+      actual_interiors = Interior.search_by_memo_text(@first_user, "机")
       actual_interiors.length.should == 1
       actual_interiors.first.id.should == @target_interior.id
     end
 
     it "履歴がないものは検索されない" do
-      actual_interiors = Interior.find_by_memo_text(@first_user, "not found")
+      actual_interiors = Interior.search_by_memo_text(@first_user, "not found")
       actual_interiors.should be_empty
     end
 
     it "マッチしない文字列は検索されない" do
       FactoryGirl.create_list(:interior_history, 4, interior: @target_interior)
 
-      actual_interiors = Interior.find_by_memo_text(@first_user, "not found")
+      actual_interiors = Interior.search_by_memo_text(@first_user, "not found")
       actual_interiors.should be_empty
     end
   end

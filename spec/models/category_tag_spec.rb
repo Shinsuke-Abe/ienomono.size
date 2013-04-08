@@ -95,7 +95,7 @@ describe CategoryTag do
       @search_tags = FactoryGirl.create_list(:search_tag, 4, user: @first_user)
     end
     it "タグ名が全て見つかる場合は引数のリストとサイズが一致する" do
-      actual_list = CategoryTag.find_tag_id_list(@search_tags.map{|tag| tag.name}, @first_user)
+      actual_list = CategoryTag.find_tag_id_list(@search_tags.map{|tag| tag.name}.join(","), @first_user)
       expect(actual_list.length).to eq @search_tags.length
     end
 
@@ -103,7 +103,7 @@ describe CategoryTag do
       expect_tags = @search_tags.map{|tag| tag.name}
       expect_tags << "not_found_tag"
 
-      actual_list = CategoryTag.find_tag_id_list(expect_tags, @first_user)
+      actual_list = CategoryTag.find_tag_id_list(expect_tags.join(","), @first_user)
       expect(actual_list.length).to eq (expect_tags.length - 1)
     end
 
