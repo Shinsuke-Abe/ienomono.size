@@ -2,6 +2,7 @@
 
 class InteriorsController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :load_interior, :only => [:show, :destroy, :edit_tags, :update_tags]
 
   # GET /interiors
   def index
@@ -10,7 +11,7 @@ class InteriorsController < ApplicationController
 
   # GET /interiors/1
   def show(id)
-    @interior = current_user.interiors.find(id)
+    # do nothing
   end
 
   # GET /interiors/new
@@ -31,7 +32,6 @@ class InteriorsController < ApplicationController
 
   # DELETE /interiors/1
   def destroy(id)
-    @interior = current_user.interiors.find(id)
     @interior.destroy
 
     redirect_to interiors_url
@@ -39,18 +39,17 @@ class InteriorsController < ApplicationController
 
   # GET /interiors/1/edit_tags
   def edit_tags(id)
-    render_js_request current_user.interiors.find(id)
+    render_js_request @interior
   end
 
   def update_tags(id, interior)
-    current_interior = current_user.interiors.find(id)
-    current_interior.category_tags = current_user.create_tagging_list(interior[:joined_tags])
+    @interior.category_tags = current_user.create_tagging_list(interior[:joined_tags])
 
-    if current_interior.save
+    if @interior.save
       flash[:notice] = "Update tagging was successfully."
       render js: "window.location = '#{interior_path(id)}'"
     else
-      render_js_request current_interior
+      render_js_request @interior
     end
   end
 
@@ -84,5 +83,9 @@ class InteriorsController < ApplicationController
   def render_js_request(interior)
     html = render_to_string partial: 'tagging_form', locals: {interior: interior}
     render json: {html: html}
+  end
+
+  def load_interior
+    @interior ||= current_user.interiors.find(params[:id])
   end
 end

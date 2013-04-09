@@ -1,6 +1,7 @@
 # encoding: utf-8
 class InteriorHistoriesController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :load_interior_history, :only => [:edit, :update, :destroy]
 
   helper_method :current_interior
 
@@ -23,13 +24,10 @@ class InteriorHistoriesController < ApplicationController
   end
 
   def edit(interior_id, id)
-    @interior_history = load_interior_history(id)
-    render_js_request(@interior_history)
+    render_js_request @interior_history
   end
 
   def update(interior_id, id, interior_history)
-    @interior_history = load_interior_history(id)
-
     if @interior_history.update_attributes(interior_history)
       success_persistence_response("updated", interior_id)
     else
@@ -38,7 +36,6 @@ class InteriorHistoriesController < ApplicationController
   end
 
   def destroy(interior_id, id)
-    @interior_history = load_interior_history(id)
     @interior_history.destroy
 
     redirect_to interior_interior_histories_path(interior_id)
@@ -49,8 +46,8 @@ class InteriorHistoriesController < ApplicationController
     @current_interior ||= current_user.interiors.find(params[:interior_id])
   end
 
-  def load_interior_history(id)
-    @interior_history = current_interior.interior_histories.find(id)
+  def load_interior_history
+    @interior_history ||= current_interior.interior_histories.find(params[:id])
   end
 
   def success_persistence_response(method, interior_id)
