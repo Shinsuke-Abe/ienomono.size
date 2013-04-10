@@ -5,7 +5,7 @@ class Interior < ActiveRecord::Base
   has_many :category_tags, :through=>:taggings
   accepts_nested_attributes_for :interior_histories
 
-  attr_accessible :name, :joined_tags
+  attr_accessible :name, :joined_tags, :interior_histories_attributes
   attr_accessor :joined_tags
 
   scope :list_users_have, ->(user = nil) do

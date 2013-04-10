@@ -32,13 +32,9 @@ class User < ActiveRecord::Base
   def build_interior_with_history_and_tagging(interior_data)
     new_interior_data = interior_data.dup
 
-    new_history = new_interior_data.delete(:interior_history)
     new_joined_tag = new_interior_data.delete(:joined_tags)
 
     interior = interiors.build(new_interior_data)
-    if new_history
-      interior.interior_histories.build(new_history)
-    end
 
     if new_joined_tag and new_joined_tag.present?
       interior.category_tags = create_tagging_list(new_joined_tag)
