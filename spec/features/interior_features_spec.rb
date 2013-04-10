@@ -13,9 +13,9 @@ describe "インテリア管理機能" do
       current_path.should == new_interior_path
 
       fill_in "interior_name", with: "インテリア"
-      fill_in "interior_interior_history_width", with: "25"
-      fill_in "interior_interior_history_height", with: "15"
-      fill_in "interior_interior_history_depth", with: "35"
+      fill_in "interior_interior_histories_attributes_0_width", with: "25"
+      fill_in "interior_interior_histories_attributes_0_height", with: "15"
+      fill_in "interior_interior_histories_attributes_0_depth", with: "35"
 
       click_button "登録する"
 

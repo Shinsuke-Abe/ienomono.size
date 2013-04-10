@@ -16,6 +16,12 @@ class Interior < ActiveRecord::Base
 
   after_initialize :do_as_after_initialize
 
+  before_save do |record|
+    if record.joined_tags and record.joined_tags.present?
+      record.category_tags = record.user.create_tagging_list(record.joined_tags)
+    end
+  end
+
   def do_as_after_initialize
     self.joined_tags ||= tags_string
   end
