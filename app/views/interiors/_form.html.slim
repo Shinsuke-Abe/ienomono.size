@@ -5,5 +5,5 @@
     = history_form.input :height
     = history_form.input :depth
     = history_form.input :memo_text
-  = f.input :joined_tags
+  = f.input :joined_tags, url: autocomplete_category_tag_name_interiors_path, as: :autocomplete, input_html: {:'data-delimiter' => ',', multiple: true}
   = f.button :submit
