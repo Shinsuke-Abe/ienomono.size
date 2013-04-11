@@ -10,7 +10,7 @@ class Interior < ActiveRecord::Base
 
   scope :list_users_have, ->(user = nil) do
     if user.present? and user.id.present?
-      {conditions: ["user_id = ?", user.id]}
+      where("user_id = ?", user.id)
     end
   end
 

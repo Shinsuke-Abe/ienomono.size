@@ -1,6 +1,6 @@
 = simple_form_for @interior do |f|
   = f.input :name
-  = f.simple_fields_for :interior_histories, @interior.interior_histories.build do |history_form|
+  = f.simple_fields_for :interior_histories, @interior.interior_histories.first || @interior.interior_histories.build do |history_form|
     = history_form.input :width
     = history_form.input :height
     = history_form.input :depth

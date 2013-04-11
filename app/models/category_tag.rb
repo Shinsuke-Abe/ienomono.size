@@ -6,9 +6,9 @@ class CategoryTag < ActiveRecord::Base
 
   scope :enable_tags, ->(user = nil) do
     if user.blank?
-      {conditions: ["user_id is null"]}
+      where("user_id is null")
     else
-      {conditions: ["user_id is null or user_id = ?", user.id]}
+      where("user_id is null or user_id = ?", user.id)
     end
   end
 
