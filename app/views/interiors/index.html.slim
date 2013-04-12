@@ -2,7 +2,7 @@ h1 Listing interiors
 
 = form_tag url_for(action: "search_by_tags"), method: "post" do
   = label_tag :search_tags, "検索タグ"
-  = autocomplete_field_tag :search_tags, @search_tags, autocomplete_category_tag_name_interiors_path, :'data-delimiter' => ',', multiple: true
+  = autocomplete_field_tag :search_tags, @search_tags, autocomplete_category_tag_name_interiors_path, :'data-delimiter' => ','
   = submit_tag "検索"
 
 = form_tag url_for(action: "search_by_memo_text"), method: "post" do

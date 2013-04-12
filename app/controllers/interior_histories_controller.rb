@@ -10,28 +10,28 @@ class InteriorHistoriesController < ApplicationController
   end
 
   def new(interior_id)
-    render_js_request()
+    render_ajax_form_request history_form_parameter()
   end
 
   def create(interior_id, interior_history)
     @interior_history = current_interior.interior_histories.build(interior_history)
 
     if @interior_history.save
-      success_persistence_response("created", interior_id)
+      render_persistance_is_successfully("Interior history", "created", interior_id)
     else
-      render_js_request(@interior_history)
+      render_ajax_form_request history_form_parameter(@interior_history)
     end
   end
 
   def edit(interior_id, id)
-    render_js_request @interior_history
+    render_ajax_form_request history_form_parameter(@interior_history)
   end
 
   def update(interior_id, id, interior_history)
     if @interior_history.update_attributes(interior_history)
-      success_persistence_response("updated", interior_id)
+      render_persistance_is_successfully("Interior history", "updated", interior_id)
     else
-      render_js_request(@interior_history)
+      render_ajax_form_request history_form_parameter(@interior_history)
     end
   end
 
@@ -50,13 +50,7 @@ class InteriorHistoriesController < ApplicationController
     @interior_history ||= current_interior.interior_histories.find(params[:id])
   end
 
-  def success_persistence_response(method, interior_id)
-    flash[:notice] = "Interior history was successfully #{method}."
-    render js: "window.location = '#{interior_path(interior_id)}'"
-  end
-
-  def render_js_request(interior_history = nil)
-    html = render_to_string partial: 'form', locals: {interior_history: interior_history}
-    render json: {html: html}
+  def history_form_parameter(history = nil)
+    {partial: 'form', locals: {interior_history: history}}
   end
 end

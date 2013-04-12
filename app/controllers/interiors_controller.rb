@@ -39,17 +39,14 @@ class InteriorsController < ApplicationController
 
   # GET /interiors/1/edit_tags
   def edit_tags(id)
-    render_js_request @interior
+    render_ajax_form_request tagging_form_parameter
   end
 
   def update_tags(id, interior)
-    @interior.category_tags = current_user.create_tagging_list(interior[:joined_tags])
-
-    if @interior.save
-      flash[:notice] = "Update tagging was successfully."
-      render js: "window.location = '#{interior_path(id)}'"
+    if @interior.update_attributes(interior)
+      render_persistance_is_successfully("Tagging", "updated", id)
     else
-      render_js_request @interior
+      render_ajax_form_request tagging_form_parameter
     end
   end
 
@@ -80,12 +77,11 @@ class InteriorsController < ApplicationController
   end
 
   private
-  def render_js_request(interior)
-    html = render_to_string partial: 'tagging_form', locals: {interior: interior}
-    render json: {html: html}
-  end
-
   def load_interior
     @interior ||= current_user.interiors.find(params[:id])
+  end
+
+  def tagging_form_parameter
+    {partial: 'tagging_form', locals: {interior: @interior}}
   end
 end

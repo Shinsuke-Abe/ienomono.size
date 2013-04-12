@@ -30,16 +30,12 @@ class User < ActiveRecord::Base
   end
 
   def create_tagging_list(tag_list)
-    tagging_list = []
-
-    tag_list.split(",").each do |tag|
+    tag_list.split(",").map do |tag|
       if category_tag = CategoryTag.find_tag(tag, self)
-        tagging_list << category_tag
+        category_tag
       else
-        tagging_list << self.category_tags.build(name: tag)
+        self.category_tags.build(name: tag)
       end
     end
-
-    tagging_list
   end
 end

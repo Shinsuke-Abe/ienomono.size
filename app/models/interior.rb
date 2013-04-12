@@ -5,8 +5,8 @@ class Interior < ActiveRecord::Base
   has_many :category_tags, :through=>:taggings
   accepts_nested_attributes_for :interior_histories
 
-  attr_accessible :name, :joined_tags, :interior_histories_attributes
-  attr_accessor :joined_tags
+  attr_accessible :name, :joined_tags_string, :interior_histories_attributes
+  attr_accessor :joined_tags_string
 
   scope :list_users_have, ->(user = nil) do
     if user.present? and user.id.present?
@@ -17,13 +17,13 @@ class Interior < ActiveRecord::Base
   after_initialize :do_as_after_initialize
 
   before_save do |record|
-    if record.joined_tags and record.joined_tags.present?
-      record.category_tags = record.user.create_tagging_list(record.joined_tags)
+    if record.joined_tags_string and record.joined_tags_string.present?
+      record.category_tags = record.user.create_tagging_list(record.joined_tags_string)
     end
   end
 
   def do_as_after_initialize
-    self.joined_tags ||= tags_string
+    self.joined_tags_string ||= tags_string
   end
 
   def latest_history
